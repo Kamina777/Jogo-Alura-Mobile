@@ -3,31 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 public class Gerador : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject prefabInimigo;
-    [SerializeField]
-    private float tempo;
-    [SerializeField]
-    private float raio;
+    [SerializeField] private GameObject prefabInimigo;
+    [SerializeField] private float tempo;
+    [SerializeField] private float raio;
+    [SerializeField] private Transform alvo;
+    [SerializeField] private Pontuacao pontuacao;
 
     private void Start()
     {
-        StartCoroutine(this.IniciarGeracao());
-    }
-
-    private IEnumerator IniciarGeracao()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(this.tempo);
-            this.Instanciar();
-        }
+        InvokeRepeating("Instanciar",0f,this.tempo);
     }
 
     private void Instanciar()
     {
         var inimigo = GameObject.Instantiate(this.prefabInimigo);
         this.DefinirPosicaoInimigo(inimigo);
+        inimigo.GetComponent<Seguir>().SetAlvo(this.alvo);
+        inimigo.GetComponent<Pontuavel>().SetPontuacao(this.pontuacao);
     }
 
     private void DefinirPosicaoInimigo(GameObject inimigo)
